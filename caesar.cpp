@@ -7,6 +7,19 @@ void usage() {
   std::cout << "USAGE: caesar [-ed] [key]\n";
 }
 
+string caesarString(string s, int amount) {
+  for (size_t i=0; i<s.length(); i++) {
+    if (isupper(s[i])) {
+      int position = (s[i] - 'A'+amount+26)%26;
+      s[i] = 'A' + position;
+    } else if (islower(s[i])) {
+      int position = (s[i] - 'a'+amount+26)%26;
+      s[i] = 'a' + position;
+    }
+  }
+  return s;
+}
+
 int main(int argc, char** argv) {
   if(argc != 3) {
     usage();
@@ -16,24 +29,23 @@ int main(int argc, char** argv) {
   string action = argv[1];
   int key = stoi(argv[2]);
 
-  if (key < 0 || (action != "-e" && action != "-d")){
+  int shift = ((key % 26) + 26) % 26;
+  int amount;
+
+  if (key < 0 || (action != "-e" && action != "-d")) {
     usage();
     return 1;
   }
-  string base = "abcdefghijklmnopqrstuvwxyz";
-  string message = "Veni, vidi, vici";
 
-  if (action == "-e"){
-    cout << base << "\n" << base.substr(key%26) << base.substr(0,key%26) 
-    << endl;
-    // e.g.: (key=4) prints abc...xyz \n defg...xyzabc
+  if (action == "-e")
+    amount = shift;
+  else if (action == "-d")
+    amount = -1*shift;
+  
+  string line;
+  while (getline(cin, line)) 
+    cout << caesarString(line, amount) << '\n';
 
-  }
-  else if (action == "-d") {
-    cout << base.substr(key%26) << base.substr(0,key%26) << "\n" << base 
-    << endl;
-    // e.g.: (key=12) prints lmn...xyzabc...ijk \n abc...xyz
-  }
-
+  return 0;
   // TODO: Finished this program
 }
