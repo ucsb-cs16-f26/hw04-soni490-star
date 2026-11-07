@@ -4,10 +4,10 @@ using namespace std;
 #include <string>
 
 void usage() {
-  std::cout << "USAGE: caesar [-ed] [key]\n";
+  cout << "USAGE: caesar [-ed] [key]\n";
 }
 
-string caesarString(string s, int amount) {
+string caesarStr(string s, int amount) {
   for (size_t i=0; i<s.length(); i++) {
     if (isupper(s[i])) {
       int position = (s[i] - 'A'+amount+26)%26;
@@ -28,14 +28,13 @@ int main(int argc, char** argv) {
 
   string action = argv[1];
   int key = stoi(argv[2]);
-
-  int shift = ((key % 26) + 26) % 26;
-  int amount;
-
   if (key < 0 || (action != "-e" && action != "-d")) {
     usage();
     return 1;
   }
+
+  int shift = ((key%26)+26)%26;
+  int amount;
 
   if (action == "-e")
     amount = shift;
@@ -44,8 +43,7 @@ int main(int argc, char** argv) {
   
   string line;
   while (getline(cin, line)) 
-    cout << caesarString(line, amount) << '\n';
+    cout << caesarStr(line, amount) << '\n';
 
   return 0;
-  // TODO: Finished this program
 }
